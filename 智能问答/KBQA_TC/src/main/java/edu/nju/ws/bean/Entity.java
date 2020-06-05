@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Entity {
     public String IRI; //若为literal，则为label原型
     public String label; //包含标识符、中文名称等
-    public String type; //指明类型，包括实体/属性 （人物/地点/官爵/政权/章回/事件/战争/郡/县/其他地点）
+    public String type; //指明类型，包括实体/属性
 
     public Entity(String IRI, String label, String type) {
         this.IRI = IRI;
