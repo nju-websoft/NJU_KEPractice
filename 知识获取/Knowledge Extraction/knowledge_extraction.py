@@ -45,12 +45,12 @@ def extraction_start():
         sentence = text_line.strip()
         if len(sentence) == 0:
             continue
-        fact_triple_extract(sentence, sentence_index)
+        fact_knowledge_extract(sentence, sentence_index)
     in_file.close()
     out_file.close()
 
 
-def fact_triple_extract(sentence, sentence_index):
+def fact_knowledge_extract(sentence, sentence_index):
     """
     对于给定的句子进行事实三元组抽取
     Args:
