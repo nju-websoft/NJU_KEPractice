@@ -1,0 +1,1 @@
+person_property	<http://ws.nju.edu.cn/tcqa#死亡时间>	死亡时间	逝世时间	去世时间

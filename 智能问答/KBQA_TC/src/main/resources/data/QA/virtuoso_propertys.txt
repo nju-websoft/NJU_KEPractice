@@ -1,0 +1,12 @@
+<http://ws.nju.edu.cn/tcqa#姓名>	姓名
+<http://ws.nju.edu.cn/tcqa#拼音>	拼音
+<http://ws.nju.edu.cn/tcqa#效忠势力>	效忠势力
+<http://ws.nju.edu.cn/tcqa#性别>	性别
+<http://ws.nju.edu.cn/tcqa#是否虚构>	是否虚构
+<http://ws.nju.edu.cn/tcqa#死亡时间>	死亡时间
+<http://ws.nju.edu.cn/tcqa#籍贯>	籍贯
+<http://ws.nju.edu.cn/tcqa#政权别称>	政权别称
+<http://ws.nju.edu.cn/tcqa#灭亡时间>	灭亡时间
+<http://ws.nju.edu.cn/tcqa#介绍>	介绍
+<http://ws.nju.edu.cn/tcqa#现地址>	现地址
+<http://ws.nju.edu.cn/tcqa#行政级别>	行政级别

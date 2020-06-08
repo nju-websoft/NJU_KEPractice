@@ -1,0 +1,27 @@
+{
+    "person":{
+        "class":[
+            "<http://ws.nju.edu.cn/tcqa#人物>"
+        ],
+        "property":[
+            "<http://ws.nju.edu.cn/tcqa#姓名>",
+            "<http://ws.nju.edu.cn/tcqa#拼音>",
+            "<http://ws.nju.edu.cn/tcqa#效忠势力>",
+            "<http://ws.nju.edu.cn/tcqa#性别>",
+            "<http://ws.nju.edu.cn/tcqa#是否虚构>",
+            "<http://ws.nju.edu.cn/tcqa#死亡时间>",
+            "<http://ws.nju.edu.cn/tcqa#籍贯>",
+            "<http://ws.nju.edu.cn/tcqa#介绍>"
+        ]
+    },
+    "place":{
+        "class":[
+            "<http://ws.nju.edu.cn/tcqa#地点>"
+        ],
+        "property":[
+            "<http://ws.nju.edu.cn/tcqa#地名>",
+            "<http://ws.nju.edu.cn/tcqa#现地址>",
+            "<http://ws.nju.edu.cn/tcqa#行政级别>"
+        ]
+    }
+}
