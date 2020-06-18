@@ -1,23 +1,13 @@
 [
   {
-    "name":"personInfo",
-    "slotList":["person_name","person_property"],
+    "name":"thingInfo",
+    "slotList":["thing_name","thing_property"],
     "slotmap": {},
     "Triggers":[],
     "regex":"",
-    "sparql": "select distinct ?value where {<person_name> <person_property> ?value.}",
+    "sparql": "select distinct ?value where {<thing_name> <thing_property> ?value.}",
     "param":["value"],
-    "info": "给出某人物的基本属性信息",
-    "reply": "<person_name>的<person_property>是#value"
-  },{
-    "name":"placeInfo",
-    "slotList":["place_name","place_property"],
-    "slotmap": {},
-    "Triggers":[],
-    "regex":"",
-    "sparql": "select distinct ?value where {<place_name> <place_property> ?value.}",
-    "param":["value"],
-    "info": "给出某地点的基本属性信息",
-    "reply": "<place_name>的<place_property>是#value"
+    "info": "给出某物的基本属性信息",
+    "reply": "<thing_name>的<thing_property>是#value"
   }
 ]

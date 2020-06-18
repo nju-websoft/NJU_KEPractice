@@ -1,0 +1,19 @@
+<http://ws.nju.edu.cn/tcqa#阿里巴巴>	<http://ws.nju.edu.cn/tcqa#创立于>	"1999年".
+<http://ws.nju.edu.cn/tcqa#阿里巴巴>	<http://ws.nju.edu.cn/tcqa#推出>	"广告交易平台阿里妈妈".
+<http://ws.nju.edu.cn/tcqa#阿里巴巴>	<http://ws.nju.edu.cn/tcqa#设于>	"中国杭州市".
+<http://ws.nju.edu.cn/tcqa#中国银行>	<http://ws.nju.edu.cn/tcqa#行长>	"肖钢".
+<http://ws.nju.edu.cn/tcqa#支付宝>	<http://ws.nju.edu.cn/tcqa#推出>	"信用卡支付".
+<http://ws.nju.edu.cn/tcqa#支付宝>	<http://ws.nju.edu.cn/tcqa#推出>	"9.0版本".
+<http://ws.nju.edu.cn/tcqa#搜狗>	<http://ws.nju.edu.cn/tcqa#推出>	"输入法|免费邮箱企业邮箱业务".
+<http://ws.nju.edu.cn/tcqa#阿里巴巴>	<http://ws.nju.edu.cn/tcqa#首席执行官>	"马云".
+<http://ws.nju.edu.cn/tcqa#阿里巴巴>	<http://www.w3.org/2000/01/rdf-schema#label> "阿里巴巴" .
+<http://ws.nju.edu.cn/tcqa#阿里巴巴>	<http://www.w3.org/2000/01/rdf-schema#label> "阿里巴巴集团" .
+<http://ws.nju.edu.cn/tcqa#搜狗>	<http://www.w3.org/2000/01/rdf-schema#label> "搜狗" .
+<http://ws.nju.edu.cn/tcqa#支付宝>	<http://www.w3.org/2000/01/rdf-schema#label> "支付宝" .
+<http://ws.nju.edu.cn/tcqa#中国银行>	<http://www.w3.org/2000/01/rdf-schema#label> "中国银行" .
+<http://ws.nju.edu.cn/tcqa#阿里巴巴>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+<http://ws.nju.edu.cn/tcqa#搜狗>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+<http://ws.nju.edu.cn/tcqa#支付宝>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+<http://ws.nju.edu.cn/tcqa#中国银行>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing>
+
+
