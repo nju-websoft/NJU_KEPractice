@@ -1,2 +1,2 @@
-person_name	<http://ws.nju.edu.cn/tcqa#曹豹>	曹豹
-person_name	<http://ws.nju.edu.cn/tcqa#曹豹>	徐州四杰
+person_name	<http://ws.nju.edu.cn/tcqa#阿里巴巴>	阿里巴巴
+person_name	<http://ws.nju.edu.cn/tcqa#阿里巴巴>	阿里巴巴集团

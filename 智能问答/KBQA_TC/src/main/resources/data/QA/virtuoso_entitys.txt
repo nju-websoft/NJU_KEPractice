@@ -1,4 +1,1 @@
-<http://ws.nju.edu.cn/tcqa#曹豹>	<http://ws.nju.edu.cn/tcqa#姓名>	"曹豹"
-<http://ws.nju.edu.cn/tcqa#东汉>	<http://ws.nju.edu.cn/tcqa#政权名>	"东汉"
-<http://ws.nju.edu.cn/tcqa#东汉>	<http://ws.nju.edu.cn/tcqa#政权别称>	"东汉"
-<http://ws.nju.edu.cn/tcqa#兖州陈留郡圉>	<http://ws.nju.edu.cn/tcqa#地名>	"兖州陈留郡圉"
+<http://ws.nju.edu.cn/tcqa#阿里巴巴>	<http://www.w3.org/2000/01/rdf-schema#label>	"阿里巴巴"
