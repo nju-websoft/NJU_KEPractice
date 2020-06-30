@@ -280,7 +280,27 @@ def doc2sent():
         temp_file.writelines(sents)
 
 
+def triple2nt():
+    with open('output.txt', 'r', encoding='utf-8') as f, open('data.nt', 'w', encoding='utf-8') as out:
+        triples = []
+        for line in f:
+            s, p, o = line.rstrip('\n')[1:-1].split(', ')
+            if '|' in s:
+                continue
+            if '|' in p:
+                p1, p2 = p.split('|')
+                triples.append((s, p1, o))
+                triples.append((s, p2, o))
+            else:
+                triples.append((s, p, o))
+        for s, p, o in triples:
+            out.write(
+                '<http://ws.nju.edu.cn/tcqa#%s>\t<http://ws.nju.edu.cn/tcqa#%s>\t<http://ws.nju.edu.cn/tcqa#%s>.\n' % (
+                s, p, o))
+
+
 if __name__ == "__main__":
     doc2sent()
     get_contruct_list()
     extraction_start()
+    triple2nt()
