@@ -21,7 +21,7 @@ out_file = open(out_file_name, 'w+', encoding="utf-8")
 construct_list = []
 
 
-def get_contruct_list():
+def get_construct_list():
     f = open('construct_dict.txt', 'r', encoding="utf-8")
     for line in f:
         construct = line.strip()
@@ -312,6 +312,6 @@ def triple2nt():
 
 if __name__ == "__main__":
     doc2sent()
-    get_contruct_list()
+    get_construct_list()
     extraction_start()
     triple2nt()
