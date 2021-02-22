@@ -1,11 +1,10 @@
 # coding=utf-8
 import re
 from pyltp import Segmentor, Postagger, Parser, NamedEntityRecognizer
-from pprint import pprint
 
+# 加载pyltp模型
 segmentor = Segmentor()
-segmentor.load_with_lexicon("./pyltp_models/cws.model", './construct_dict.txt')
-# segmentor.load("./ltp_data/cws.model")  # 分词模型
+segmentor.load_with_lexicon("./pyltp_models/cws.model", './construct_dict.txt')  # 分词模型
 postagger = Postagger()
 postagger.load("./pyltp_models/pos.model")  # 词性标注
 parser = Parser()
@@ -13,27 +12,46 @@ parser.load("./pyltp_models/parser.model")  # 依存句法分析
 recognizer = NamedEntityRecognizer()
 recognizer.load("./pyltp_models/ner.model")  # 命名实体识别
 
-in_file_name = "sentences.txt"
-out_file_name = "output.txt"
-in_file = open(in_file_name, 'r', encoding="utf-8")
-out_file = open(out_file_name, 'w+', encoding="utf-8")
+# 文件定义
+input_file = "input.txt"  # 输入文本文件
+temp_file = "tmp.txt"  # 中间处理文件
+output_file = "output.txt"  # 输出文本文件
+dict_file = "dict.txt"  # 字典文件
+triple_file = "data.nt"  # 最终输出文件
 
 construct_list = []
 
 
-def get_construct_list():
-    f = open('construct_dict.txt', 'r', encoding="utf-8")
+def get_dict_list():
+    """
+    获取词典内容
+    """
+    f = open(dict_file, 'r', encoding="utf-8")
     for line in f:
         construct = line.strip()
         if construct not in construct_list:
             construct_list.append(construct)
 
 
-def map_WordList_ConstructList(word_list):
+def map_wordlist_constructlist(word_list):
+    """
+    检测word_list是否存在于字典中
+    """
     for word in construct_list:
         if word == word_list:
             return True
     return False
+
+
+def doc2sent():
+    """
+    将input_file中的文本进行分句，并保存在temp_file中
+    """
+    with open(input_file, 'r', encoding='utf-8') as in_file, open(temp_file, 'w', encoding='utf-8') as tmp_file:
+        inputs = in_file.read()
+        sents = re.split('[。]', inputs)
+        sents = '\n'.join(sents)
+        tmp_file.writelines(sents)
 
 
 def extraction_start():
@@ -44,16 +62,12 @@ def extraction_start():
         sentence = text_line.strip()
         if len(sentence) == 0:
             continue
-        fact_knowledge_extract(sentence, sentence_index)
-    in_file.close()
-    out_file.close()
+        fact_knowledge_extract(sentence)
 
 
-def fact_knowledge_extract(sentence, sentence_index):
+def fact_knowledge_extract(sentence):
     """
     对于给定的句子进行事实三元组抽取
-    Args:
-        sentence: 要处理的语句
     """
     words = segmentor.segment(sentence)
     postags = postagger.postag(words)
@@ -62,30 +76,17 @@ def fact_knowledge_extract(sentence, sentence_index):
 
     child_dict_list = build_parse_child_dict(words, postags, arcs)
 
-    # print("\t".join(words))
-    # print("\t".join(postags))
-    # print('\t'.join(netags))
-    # print("\t".join("%d:%s" % (arc.head, arc.relation) for arc in arcs))
-    # pprint(child_dict_list)
-    # print('========================')
-
     for index in range(len(postags)):
         # 抽取以谓词为中心的事实三元组
         if postags[index] == 'v':
             child_dict = child_dict_list[index]
             # 主谓宾
             if 'SBV' in child_dict and 'VOB' in child_dict:
-                # print(index, words[index])
                 cur_wordlist = []
                 e1 = complete_entity(words, postags, child_dict_list, child_dict['SBV'][0], cur_wordlist)
                 r = words[index]
                 e2 = complete_entity(words, postags, child_dict_list, child_dict['VOB'][0], cur_wordlist)
-                # print('==================================')
-                # print(e1)
-                # print(r)
-                # print(e2)
-                if (map_WordList_ConstructList(cur_wordlist)):
-                    # out_file.write("主语谓语宾语关系\t({}, {}, {})\t{}\n".format(e1, r, e2, sentence_index))
+                if map_wordlist_constructlist(cur_wordlist):
                     out_file.write("({}, {}, {})\n".format(e1, r, e2))
 
                 if 'COO' in child_dict:  # 寻找并列关系
@@ -96,48 +97,8 @@ def fact_knowledge_extract(sentence, sentence_index):
                         e1 = complete_entity(words, postags, child_dict_list, child_dict['SBV'][0], cur_wordlist)
                         r = words[tie_index]
                         e2 = complete_entity(words, postags, child_dict_list, new_child_dict['VOB'][0], cur_wordlist)
-                        # print('==================================')
-                        # print(e1)
-                        # print(r)
-                        # print(e2)
-                        if (map_WordList_ConstructList(cur_wordlist)):
-                            # out_file.write("主语谓语宾语关系\t({}, {}, {})\t{}\n".format(e1, r, e2, sentence_index))
+                        if map_wordlist_constructlist(cur_wordlist):
                             out_file.write("({}, {}, {})\n".format(e1, r, e2))
-
-            # 定语后置，动宾关系
-            # if arcs[index].relation == 'ATT':
-            #     if 'VOB' in child_dict:
-            #         cur_wordlist = []
-            #         e1 = complete_entity(words, postags, child_dict_list, arcs[index].head - 1, cur_wordlist)
-            #         r = words[index]
-            #         e2 = complete_entity(words, postags, child_dict_list, child_dict['VOB'][0], cur_wordlist)
-            #         temp_string = r+e2
-            #         if temp_string == e1[:len(temp_string)]:
-            #             e1 = e1[len(temp_string):]
-            #         print('==================================')
-            #         print(e1)
-            #         print(r)
-            #         print(e2)
-            #         if temp_string not in e1:
-            #             if (map_WordList_ConstructList(cur_wordlist)):
-            #                 # out_file.write("定语后置动宾关系\t({}, {}, {})\t{}\n".format(e1, r, e2, sentence_index))
-            #                 out_file.write("({}, {}, {})\n".format(e1, r, e2))
-
-            # 含有介宾关系的主谓动补关系
-            if 'SBV' in child_dict and 'CMP' in child_dict:
-                cur_wordlist = []
-                e1 = complete_entity(words, postags, child_dict_list, child_dict['SBV'][0], cur_wordlist)
-                cmp_index = child_dict['CMP'][0]
-                r = words[index] + words[cmp_index]
-                if 'POB' in child_dict_list[cmp_index]:
-                    e2 = complete_entity(words, postags, child_dict_list, child_dict_list[cmp_index]['POB'][0], cur_wordlist)
-                    # print('==================================')
-                    # print(e1)
-                    # print(r)
-                    # print(e2)
-                    if (map_WordList_ConstructList(cur_wordlist)):
-                        # out_file.write("介宾关系主谓动补\t({}, {}, {})\t{}\n".format(e1, r, e2, sentence_index))
-                        out_file.write("({}, {}, {})\n".format(e1, r, e2))
 
         # 尝试抽取命名实体有关的三元组
         if netags[index][0] == 'S' or netags[index][0] == 'B':
@@ -147,12 +108,9 @@ def fact_knowledge_extract(sentence, sentence_index):
                     if netags[i][0] == 'E':
                         ni = i
                         break
-                # while ni < len(postags) and netags[ni][0] != 'E':
-                #     ni += 1
                 e1 = ''.join(words[index:ni+1])
             else:
                 e1 = words[ni]
-            # print(e1)
 
             if arcs[ni].relation == 'ATT' and postags[arcs[ni].head-1] == 'n' and netags[arcs[ni].head-1] == 'O':
                 cur_wordlist = []
@@ -170,18 +128,25 @@ def fact_knowledge_extract(sentence, sentence_index):
                         e2 += e
                     if r in e2:
                         e2 = e2[(e2.index(r)+len(r)):]
-                    # print('==================================')
-                    # print(e1)
-                    # print(r)
-                    # print(e2)
-                    # if r+e2 in sentence:
-                        # out_file.write("人名//地名//机构\t(%s, %s, %s)\n" % (e1, r, e2))
                     out_file.write("(%s, %s, %s)\n" % (e1, r, e2))
 
-    # extract_person_construction(words, postags, netags, arcs)
+    # 补充抽取一些实体相关三元组
+    triple_extraction_supplement(words, postags, netags, arcs)
 
 
-def extract_person_construction(words, postags, netags, arcs):
+def triple_extraction_supplement(words, postags, netags, arcs):
+    def complete_construction(words, child_dict_list, word_index, is_head):
+        child_dict = child_dict_list[word_index]
+        prefix = ''
+        if 'ATT' in child_dict:
+            if is_head:
+                for i in child_dict['ATT']:
+                    prefix += words[i]
+            else:
+                for i in child_dict['ATT'][1:]:
+                    prefix += words[i]
+        return prefix + words[word_index]
+
     child_dict_list = build_parse_child_dict(words, postags, arcs)
     for index in range(len(postags)):
         if netags[index][0] == 'S':
@@ -193,7 +158,6 @@ def extract_person_construction(words, postags, netags, arcs):
                     e1 = complete_construction(words, child_dict_list, e1_index, True) + words[first_entity_index]
                     relation = complete_construction(words, child_dict_list, index - 1, False)
                     e2 = words[index]
-                    # out_file.write("人名//职位//机构\t(%s, %s, %s)\n" % (e1, relation, e2))
                     out_file.write("(%s, %s, %s)\n" % (e1, relation, e2))
 
                 if 'LAD' in pre_child_dict:  # 并列结构
@@ -204,21 +168,7 @@ def extract_person_construction(words, postags, netags, arcs):
                             e1 = complete_construction(words, child_dict_list, e1_index, True)
                             relation = complete_construction(words, child_dict_list, tie_entity_index, False)
                             e2 = words[index]
-                            # out_file.write("人名//职位//机构\t(%s, %s, %s)\n" % (e1, relation, e2))
                             out_file.write("(%s, %s, %s)\n" % (e1, relation, e2))
-
-
-def complete_construction(words, child_dict_list, word_index, is_head):
-    child_dict = child_dict_list[word_index]
-    prefix = ''
-    if 'ATT' in child_dict:
-        if is_head:
-            for i in child_dict['ATT']:
-                prefix += words[i]
-        else:
-            for i in child_dict['ATT'][1:]:
-                prefix += words[i]
-    return prefix + words[word_index]
 
 
 def build_parse_child_dict(words, postags, arcs):
@@ -246,7 +196,6 @@ def complete_entity(words, postags, child_dict_list, word_index, wordlist):
     """
     完善识别的部分实体
     """
-
     child_dict = child_dict_list[word_index]
     prefix = ''
     if 'ATT' in child_dict:
@@ -271,15 +220,10 @@ def complete_entity(words, postags, child_dict_list, word_index, wordlist):
     return prefix + words[word_index] + postfix + tie_entity
 
 
-def doc2sent():
-    with open('input.txt', 'r', encoding='utf-8') as in_file, open('sentences.txt', 'w', encoding='utf-8') as temp_file:
-        inputs = in_file.read()
-        sents = re.split('[。]', inputs)
-        sents = '\n'.join(sents)
-        temp_file.writelines(sents)
-
-
 def triple2nt():
+    """
+    将output.txt中的三元组转化成带有前缀的三元组并保存在data.nt中
+    """
     prefix = ''
     with open('virtuoso_config.properties', 'r', encoding='utf-8') as f:
         for line in f.readlines():
@@ -289,7 +233,7 @@ def triple2nt():
                 start = prefix.find('<')
                 prefix = prefix[start:-1]  # 包含<,不包含>
                 break
-    with open('output.txt', 'r', encoding='utf-8') as f, open('data.nt', 'w', encoding='utf-8') as out:
+    with open(output_file, 'r', encoding='utf-8') as f, open(triple_file, 'w', encoding='utf-8') as out:
         triples = []
         for line in f:
             s, p, o = line.rstrip('\n')[1:-1].split(', ')
@@ -302,7 +246,7 @@ def triple2nt():
             else:
                 triples.append((s, p, o))
         for s, p, o in triples:
-            if (map_WordList_ConstructList(o)):
+            if map_wordlist_constructlist(o):
                 out.write(
                     '%s%s>\t%s%s>\t%s%s>.\n' % (prefix, s, prefix, p, prefix, o))
             else:
@@ -312,6 +256,7 @@ def triple2nt():
 
 if __name__ == "__main__":
     doc2sent()
-    get_construct_list()
-    extraction_start()
+    get_dict_list()
+    with open(temp_file, 'r', encoding='utf-8') as in_file, open(output_file, 'w', encoding='utf-8') as out_file:
+        extraction_start()
     triple2nt()
