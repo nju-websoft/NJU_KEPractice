@@ -231,7 +231,7 @@ def triple2nt():
             if line[0] == 'tcqaPrefix':
                 prefix = line[1]
                 start = prefix.find('<')
-                prefix = prefix[start:-1]  # 包含<,不包含>
+                prefix = prefix[start:]  # 包含<,不包含>
                 break
     with open(output_file, 'r', encoding='utf-8') as f, open(triple_file, 'w', encoding='utf-8') as out:
         triples = []
