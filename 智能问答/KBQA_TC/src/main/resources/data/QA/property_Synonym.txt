@@ -1,1 +1,1 @@
-person_property	<http://ws.nju.edu.cn/tcqa#死亡时间>	死亡时间	逝世时间	去世时间
+thing_property	<http://ws.nju.edu.cn/tcqa#创立于>	创立时间	创办时间	创立于
